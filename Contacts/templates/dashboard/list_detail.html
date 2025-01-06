@@ -1,0 +1,38 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<h2>{{ contact_list.name }}</h2>
+<p>{{ contact_list.description }}</p>
+
+<a href="{% url 'add_contact_email' contact_list.id %}" class="btn btn-success mb-3">Agregar Email</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Fecha creación</th>
+            <th>Estado</th>
+            <th>Último envío</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for email in emails %}
+        <tr>
+            <td>{{ email.name }}</td>
+            <td>{{ email.email }}</td>
+            <td>{{ email.created_at|date:"d/m/Y H:i" }}</td>
+            <td>{{ email.is_valid|yesno:"Válido,Inválido" }}</td>
+            <td>{{ email.last_sent_at|date:"d/m/Y H:i"|default:"-" }}</td>
+            <td>
+                <form action="{% url 'delete_contact_email' email.id %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

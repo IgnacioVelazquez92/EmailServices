@@ -1,9 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
-from .forms import CustomUserCreationForm, CustomAuthenticationForm
+from .forms import CustomUserCreationForm, CustomAuthenticationForm, ContactListForm, ContactEmailForm
+from django.contrib.auth.decorators import login_required
+from .models import ContactList, ContactEmail
 
 
 def registro(request):
@@ -39,28 +41,6 @@ def cerrar_sesion(request):
     return redirect('index')
 
 
-# def iniciar_sesion(request):
-#     if request.method == 'GET':
-#         return render(request, 'session/signin.html', {
-#             'form': AuthenticationForm(),
-#         })
-#     else:
-#         # Pasar datos directamente al formulario
-#         form = AuthenticationForm(data=request.POST)
-#         if form.is_valid():
-#             username = form.cleaned_data.get('username')
-#             password = form.cleaned_data.get('password')
-#             user = authenticate(request, username=username, password=password)
-
-#             if user is not None:
-#                 login(request, user)
-#                 return redirect('index')
-#         # Si el formulario no es válido o la autenticación falla
-#         return render(request, 'session/signin.html', {
-#             'form': form,
-#             'mensaje': 'Usuario o contraseña incorrectos'
-#         })
-
 def iniciar_sesion(request):
     if request.method == 'GET':
         return render(request, 'session/signin.html', {
@@ -80,3 +60,84 @@ def iniciar_sesion(request):
             'form': form,
             'mensaje': 'Usuario o contraseña incorrectos'
         })
+
+
+# CRUD para ContactList
+@login_required
+def contact_list_dashboard(request):
+    lists = ContactList.objects.filter(user=request.user)
+    return render(request, 'dashboard/contact_list_dashboard.html', {'lists': lists})
+
+
+@login_required
+def create_contact_list(request):
+    if request.method == 'POST':
+        form = ContactListForm(request.POST)
+        if form.is_valid():
+            contact_list = form.save(commit=False)
+            contact_list.user = request.user
+            contact_list.save()
+            return redirect('contact_list_dashboard')
+    else:
+        form = ContactListForm()
+    return render(request, 'dashboard/contact_list_form.html', {'form': form})
+
+
+@login_required
+def edit_contact_list(request, pk):
+    contact_list = get_object_or_404(ContactList, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = ContactListForm(request.POST, instance=contact_list)
+        if form.is_valid():
+            form.save()
+            return redirect('contact_list_dashboard')
+    else:
+        form = ContactListForm(instance=contact_list)
+    return render(request, 'dashboard/contact_list_form.html', {'form': form})
+
+
+@login_required
+def delete_contact_list(request, pk):
+    contact_list = get_object_or_404(ContactList, pk=pk, user=request.user)
+    if request.method == 'POST':
+        contact_list.delete()
+        return redirect('contact_list_dashboard')
+    return render(request, 'dashboard/contact_list_confirm_delete.html', {'contact_list': contact_list})
+
+
+# CRUD para ContactEmail
+
+@login_required
+def add_contact_email(request, contact_list_id):
+    contact_list = get_object_or_404(
+        ContactList, pk=contact_list_id, user=request.user)
+    if request.method == 'POST':
+        form = ContactEmailForm(request.POST, contact_list=contact_list)
+        if form.is_valid():
+            email = form.save(commit=False)
+            email.contact_list = contact_list
+            email.save()
+            return redirect('list_detail', pk=contact_list.id)
+    else:
+        form = ContactEmailForm(contact_list=contact_list)
+    return render(request, 'dashboard/contact_email_form.html', {'form': form, 'contact_list': contact_list})
+
+
+@login_required
+def delete_contact_email(request, email_id):
+    email = get_object_or_404(
+        ContactEmail, pk=email_id, contact_list__user=request.user)
+    if request.method == 'POST':
+        email.delete()
+        return redirect('contact_list_dashboard')
+    return render(request, 'dashboard/contact_email_confirm_delete.html', {'email': email})
+
+
+@login_required
+def list_detail(request, pk):
+    contact_list = get_object_or_404(ContactList, pk=pk, user=request.user)
+    emails = ContactEmail.objects.filter(contact_list=contact_list)
+    return render(request, 'dashboard/list_detail.html', {
+        'contact_list': contact_list,
+        'emails': emails
+    })

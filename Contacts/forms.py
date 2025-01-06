@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from .models import ContactList, ContactEmail
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -59,3 +60,48 @@ class CustomAuthenticationForm(AuthenticationForm):
         }),
         label="Contraseña"
     )
+
+
+class ContactListForm(forms.ModelForm):
+    class Meta:
+        model = ContactList
+        fields = ['name', 'description']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Nombre de la lista'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Descripción de la lista',
+                'rows': 3,
+            }),
+        }
+
+
+class ContactEmailForm(forms.ModelForm):
+    class Meta:
+        model = ContactEmail
+        fields = ['name', 'email']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Nombre del contacto'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Correo electrónico'
+            })
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.contact_list = kwargs.pop('contact_list', None)
+        super().__init__(*args, **kwargs)
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if email and self.contact_list:
+            if ContactEmail.objects.filter(email=email, contact_list=self.contact_list).exists():
+                raise forms.ValidationError(
+                    'Este email ya existe en esta lista de contactos')
+        return email
