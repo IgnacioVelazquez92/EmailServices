@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from Contacts.models import ContactList, ContactEmail
 
 
-@login_required
+@login_required(login_url='/signin/')
 def create_campaign(request):
     if request.method == 'POST':
         form = CampaignForm(request.POST, user=request.user)
@@ -25,26 +25,26 @@ def create_campaign(request):
     return render(request, 'create_campaign.html', {'form': form})
 
 
-@login_required
+@login_required(login_url='/signin/')
 def send_campaign(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id, user=request.user)
     send_campaign_emails(campaign)
     return redirect('campaign_list')
 
 
-@login_required
+@login_required(login_url='/signin/')
 def campaign_list(request):
     campaigns = Campaign.objects.filter(user=request.user)
     return render(request, 'campaign_list.html', {'campaigns': campaigns})
 
 
-@login_required
+@login_required(login_url='/signin/')
 def campaign_detail(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id, user=request.user)
     return render(request, 'campaign_detail.html', {'campaign': campaign})
 
 
-@login_required
+@login_required(login_url='/signin/')
 def edit_campaign(request, pk):
     # Asegurarnos de que solo se pueda acceder a campañas del usuario actual
     campaign = get_object_or_404(Campaign, pk=pk, user=request.user)
@@ -62,7 +62,7 @@ def edit_campaign(request, pk):
     return render(request, 'edit_campaign.html', {'form': form})
 
 
-@login_required
+@login_required(login_url='/signin/')
 def delete_campaign(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id, user=request.user)
     campaign.delete()

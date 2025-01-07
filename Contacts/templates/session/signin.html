@@ -1,44 +1,41 @@
 {% extends 'index.html' %}
 
 {% block content %}
-
-
-<div class="container mt-5">
-  <div class="row justify-content-center">
-      <div class="col-md-6">
-          <h1 class="mb-4 text-center">Iniciar Sesión</h1>
-          <form action="" method="post" class="mt-4">
-            {% csrf_token %}
-            <div class="mb-3">
-              {{ form.username.label_tag }}  <!-- Label del campo username -->
-              {{ form.username }}  <!-- Campo de username -->
-              {% if form.username.errors %}
-                <div class="text-danger small">
-                  {{ form.username.errors }}
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center text-lg-start">
+            <h1 class="display-4 fw-bold lh-1 text-body-emphasis mb-3">Inicia sesión</h1>
+            <p class="col-lg-10 fs-4">Accede a tu cuenta para gestionar tus preferencias, consultar tus datos y mucho más.</p>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form method="post" class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+                {% csrf_token %}
+                <div class="form-floating mb-3">
+                    {{ form.username }}
+                    <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                    {% if form.username.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.username.errors }}
+                        </div>
+                    {% endif %}
                 </div>
-              {% endif %}
-            </div>
-        
-            <div class="mb-3">
-              {{ form.password.label_tag }}  <!-- Label del campo password -->
-              {{ form.password }}  <!-- Campo de password -->
-              {% if form.password.errors %}
-                <div class="text-danger small">
-                  {{ form.password.errors }}
+                <div class="form-floating mb-3">
+                    {{ form.password }}
+                    <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                    {% if form.password.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.password.errors }}
+                        </div>
+                    {% endif %}
                 </div>
-              {% endif %}
-            </div>
-        
-            <button class="btn btn-primary" type="submit">Iniciar Sesión</button>
-          </form>
-          {% if mensaje %}
-              <div class="alert alert-danger mt-3" role="alert">
-                  {{ mensaje }}
-              </div>
-          {% endif %}
-      </div>
-  </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Iniciar Sesión</button>
+            </form>
+            {% if mensaje %}
+                <div class="alert alert-danger mt-3" role="alert">
+                    {{ mensaje }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
-  
-
 {% endblock %}

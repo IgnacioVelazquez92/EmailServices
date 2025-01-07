@@ -62,14 +62,45 @@ def iniciar_sesion(request):
         })
 
 
-# CRUD para ContactList
 @login_required
+def edit_user(request):
+    user = request.user  # Obtener el usuario autenticado
+
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+
+        try:
+            # Actualizar el usuario solo si los datos son válidos y no están en uso
+            if User.objects.exclude(pk=user.pk).filter(username=username).exists():
+                messages.error(request, "El nombre de usuario ya está en uso.")
+            elif User.objects.exclude(pk=user.pk).filter(email=email).exists():
+                messages.error(
+                    request, "El correo electrónico ya está en uso.")
+            else:
+                user.username = username
+                user.email = email
+                user.save()
+                messages.success(
+                    request, "Tu información fue actualizada correctamente.")
+                # Redirige a la página de perfil o a la que elijas
+                return redirect("profile")
+        except IntegrityError:
+            messages.error(
+                request, "Ocurrió un error al actualizar tus datos.")
+
+    return render(request, "session/edit_user.html", {"user": user})
+
+# CRUD para ContactList
+
+
+@login_required()
 def contact_list_dashboard(request):
     lists = ContactList.objects.filter(user=request.user)
     return render(request, 'dashboard/contact_list_dashboard.html', {'lists': lists})
 
 
-@login_required
+@login_required(login_url='/signin/')
 def create_contact_list(request):
     if request.method == 'POST':
         form = ContactListForm(request.POST)
@@ -83,7 +114,7 @@ def create_contact_list(request):
     return render(request, 'dashboard/contact_list_form.html', {'form': form})
 
 
-@login_required
+@login_required(login_url='/signin/')
 def edit_contact_list(request, pk):
     contact_list = get_object_or_404(ContactList, pk=pk, user=request.user)
     if request.method == 'POST':
@@ -96,7 +127,7 @@ def edit_contact_list(request, pk):
     return render(request, 'dashboard/contact_list_form.html', {'form': form})
 
 
-@login_required
+@login_required(login_url='/signin/')
 def delete_contact_list(request, pk):
     contact_list = get_object_or_404(ContactList, pk=pk, user=request.user)
     if request.method == 'POST':
@@ -107,7 +138,7 @@ def delete_contact_list(request, pk):
 
 # CRUD para ContactEmail
 
-@login_required
+@login_required(login_url='/signin/')
 def add_contact_email(request, contact_list_id):
     contact_list = get_object_or_404(
         ContactList, pk=contact_list_id, user=request.user)
@@ -123,7 +154,7 @@ def add_contact_email(request, contact_list_id):
     return render(request, 'dashboard/contact_email_form.html', {'form': form, 'contact_list': contact_list})
 
 
-@login_required
+@login_required(login_url='/signin/')
 def delete_contact_email(request, email_id):
     email = get_object_or_404(
         ContactEmail, pk=email_id, contact_list__user=request.user)
@@ -133,7 +164,7 @@ def delete_contact_email(request, email_id):
     return render(request, 'dashboard/contact_email_confirm_delete.html', {'email': email})
 
 
-@login_required
+@login_required(login_url='/signin/')
 def list_detail(request, pk):
     contact_list = get_object_or_404(ContactList, pk=pk, user=request.user)
     emails = ContactEmail.objects.filter(contact_list=contact_list)

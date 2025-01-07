@@ -1,24 +1,27 @@
-{% extends 'index.html' %} 
+{% extends 'index.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h1 class="mb-4 text-center">Registro de Usuario</h1>
-            <form method="post">
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center text-lg-start">
+            <h1 class="display-4 fw-bold lh-1 text-body-emphasis mb-3">Regístrate en nuestra plataforma</h1>
+            <p class="col-lg-10 fs-4">Completa el siguiente formulario para crear tu cuenta y empezar a disfrutar de todos nuestros servicios.</p>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form method="post" class="p-2 p-md-3 border rounded-3 bg-body-tertiary">
                 {% csrf_token %}
                 {% for field in form %}
-                    <div class="mb-3">
-                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    <div class="form-floating mb-3">
                         {{ field }}
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                         {% if field.errors %}
-                            <div class="text-danger">
+                            <div class="text-danger small mt-1">
                                 {{ field.errors }}
                             </div>
                         {% endif %}
                     </div>
                 {% endfor %}
-                <button type="submit" class="btn btn-primary w-100">Registrarme</button>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Registrarme</button>
             </form>
             {% if mensaje %}
                 <div class="alert alert-danger mt-3" role="alert">
@@ -28,5 +31,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}

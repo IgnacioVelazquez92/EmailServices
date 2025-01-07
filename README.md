@@ -34,34 +34,99 @@ Sistema de gestión de campañas de email desarrollado con Django que permite a 
    - Contiene asunto, cuerpo y estado del envío
    - Se relaciona con las listas de contactos objetivo
 
-### Relaciones
+## Diagrama Entidad-Relación
+A continuación, se incluye un diagrama de entidad-relación que describe la estructura del sistema:
 
-- Un Usuario puede tener múltiples Listas de Contactos y Campañas
-- Una Lista de Contactos puede contener múltiples Emails
-- Una Campaña puede dirigirse a múltiples Listas de Contactos
+![Diagrama ER](/DiagramaER.svg)
 
-## Requisitos Técnicos
 
-- Python 3.8+
-- Django 4.0+
-- Bootstrap 5
-- PostgreSQL (recomendado para producción)
+---
 
-## Instalación y Configuración
+## Instalación y configuración
 
-[Instrucciones pendientes de desarrollo]
+### Requisitos previos
+- Python 3.10 o superior.
+- Django 4.x.
+- Un servidor de correo electrónico configurado.
 
-## Uso
+### Pasos de instalación
+1. Clonar el repositorio:
+   ```bash
+   git clone https://github.com/tu-repositorio/email-campaign-system.git
+   cd email-campaign-system
+   ```
 
-[Instrucciones pendientes de desarrollo]
+2. Crear y activar un entorno virtual:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # En Windows: venv\Scripts\activate
+   ```
 
-## Consideraciones de Seguridad
+3. Instalar dependencias:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-- Validación de emails con expresiones regulares
-- Autenticación requerida para todas las operaciones
-- Aislamiento de datos entre usuarios
-- Manejo seguro de errores
+4. Configurar las variables de entorno en un archivo `.env`:
+   ```env
+   SECRET_KEY=tu-clave-secreta
+   EMAIL_HOST=smtp.tu-servidor.com
+   EMAIL_PORT=587
+   EMAIL_HOST_USER=tu-email@dominio.com
+   EMAIL_HOST_PASSWORD=tu-contraseña
+   EMAIL_USE_TLS=True
+   DEFAULT_FROM_EMAIL=tu-email@dominio.com
+   ```
+
+5. Realizar las migraciones:
+   ```bash
+   python manage.py migrate
+   ```
+
+6. Ejecutar el servidor de desarrollo:
+   ```bash
+   python manage.py runserver
+   ```
+
+---
+
+## Estructura del proyecto
+
+```plaintext
+/
+├── Contacts/
+├───── templates/
+├───── static/          
+├── Campaigns/           
+├───── templates/                    
+├── manage.py             
+```    
+---
+
+## Video explicativo
+En esta sección se incluirá un enlace o video embebido que explique cómo funciona la aplicación, destacando:
+
+1. Navegación por las secciones de la aplicación.
+2. Creación de listas de contactos.
+3. Creación y envío de una campaña.
+4. Edición de perfil de usuario.
+
+**Placeholder para el video:**
+
+[![Video explicativo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+
+---
+
+## Contribución
+
+Si deseas contribuir a este proyecto, sigue estos pasos:
+
+1. Haz un fork del repositorio.
+2. Crea una rama con tu función o corrección: `git checkout -b mi-rama`.
+3. Envía tus cambios mediante un Pull Request.
+
+---
 
 ## Licencia
+Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
 
-[Pendiente de definir]

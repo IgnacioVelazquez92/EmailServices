@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -118,21 +119,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'statics/'
+STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_URL = '/login/'  # URL para la página de inicio de sesión
+LOGIN_REDIRECT_URL = '/'  # Redirigir tras iniciar sesión
+LOGOUT_REDIRECT_URL = '/login/'  # Redirigir tras cerrar sesión
+
 # Configuración de correo electrónico
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Servidor SMTP de Gmail
-EMAIL_PORT = 587  # Puerto para conexiones TLS
-EMAIL_USE_TLS = True  # Usar TLS para seguridad
-EMAIL_HOST_USER = 'ignacio.startek.v92@gmail.com'  # Tu correo de Gmail
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_HOST = config('EMAIL_HOST')  # Servidor SMTP de Gmail
+EMAIL_PORT = config('EMAIL_PORT', cast=int)  # Puerto para conexiones TLS
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)  # Usar TLS para seguridad
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # Tu correo de Gmail
 # Contraseña de tu cuenta de Gmail (o App Password)
-EMAIL_HOST_PASSWORD = 'cstowhkiordjpgyg'
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Correo predeterminado para el envío
 
 
