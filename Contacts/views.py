@@ -94,7 +94,7 @@ def edit_user(request):
 # CRUD para ContactList
 
 
-@login_required()
+@login_required(login_url='/signin/')
 def contact_list_dashboard(request):
     lists = ContactList.objects.filter(user=request.user)
     return render(request, 'dashboard/contact_list_dashboard.html', {'lists': lists})

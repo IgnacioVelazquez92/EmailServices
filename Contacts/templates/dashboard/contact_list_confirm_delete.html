@@ -1,6 +1,7 @@
 {% extends 'index.html' %}
 
 {% block content %}
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
 <h1>¿Estás seguro de que deseas eliminar esta lista?</h1>
 <p><strong>{{ contact_list.name }}</strong></p>
 <form method="POST">
@@ -8,4 +9,5 @@
     <button type="submit" class="btn btn-danger">Eliminar</button>
     <a href="{% url 'contact_list_dashboard' %}" class="btn btn-secondary">Cancelar</a>
 </form>
+</div>
 {% endblock %}

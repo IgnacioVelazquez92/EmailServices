@@ -113,7 +113,8 @@ En esta sección se incluirá un enlace o video embebido que explique cómo func
 
 **Placeholder para el video:**
 
-[![Video explicativo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+[![Video explicativo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=xjqXC0UCPzo)
+
 
 ---
 

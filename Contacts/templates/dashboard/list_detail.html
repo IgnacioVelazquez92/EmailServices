@@ -1,6 +1,8 @@
 {% extends 'index.html' %}
 
 {% block content %}
+
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
 <h2>{{ contact_list.name }}</h2>
 <p>{{ contact_list.description }}</p>
 
@@ -35,4 +37,6 @@
         {% endfor %}
     </tbody>
 </table>
+
+</div>
 {% endblock %}

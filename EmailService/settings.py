@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from decouple import config
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -135,7 +134,7 @@ EMAIL_BACKEND = config('EMAIL_BACKEND')
 EMAIL_HOST = config('EMAIL_HOST')  # Servidor SMTP de Gmail
 EMAIL_PORT = config('EMAIL_PORT', cast=int)  # Puerto para conexiones TLS
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)  # Usar TLS para seguridad
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # Tu correo de Gmail
+EMAIL_HOST_USER = 'ignacio.startek.v92@gmail.com'  # Tu correo de Gmail
 # Contraseña de tu cuenta de Gmail (o App Password)
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Correo predeterminado para el envío

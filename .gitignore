@@ -3,6 +3,7 @@
 db.sqlite3
 env.py
 local_settings.py
+venv
 
 # Archivos de caché
 *.pyc
