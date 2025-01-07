@@ -1,0 +1,52 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Detalles de la Campaña</h1>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>Asunto:</th>
+            <td>{{ campaign.subject }}</td>
+        </tr>
+        <tr>
+            <th>Cuerpo:</th>
+            <td>{{ campaign.body }}</td>
+        </tr>
+        <tr>
+            <th>Estado:</th>
+            <td>{{ campaign.get_status_display }}</td>
+        </tr>
+        <tr>
+            <th>Fecha de Creación:</th>
+            <td>{{ campaign.created_at|date:"d/m/Y H:i" }}</td>
+        </tr>
+        <tr>
+            <th>Programada para:</th>
+            <td>{{ campaign.scheduled_at|date:"d/m/Y H:i" }}</td>
+        </tr>
+        <tr>
+            <th>Fecha de Envío:</th>
+            <td>{{ campaign.sent_at|date:"d/m/Y H:i" }}</td>
+        </tr>
+        <tr>
+            <th>Listas de Contactos:</th>
+            <td>
+                {% for contact_list in campaign.contact_lists.all %}
+                    {{ contact_list.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+
+    <div class="mt-3">
+        <a href="{% url 'campaign_list' %}" class="btn btn-secondary">Volver</a>
+        <a href="{% url 'campaign_edit' campaign.id %}" class="btn btn-warning">Editar</a>
+        <a href="{% url 'send_campaign' campaign.id %}" class="btn btn-success">Enviar</a>
+        <a href="{% url 'campaign_delete' campaign.id %}" class="btn btn-danger" 
+           onclick="return confirm('¿Estás seguro de que deseas eliminar esta campaña?');">
+           Eliminar
+        </a>
+    </div>
+</div>
+{% endblock %}

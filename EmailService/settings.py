@@ -106,9 +106,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
 
 USE_I18N = True
 
@@ -118,9 +118,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'statics/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configuración de correo electrónico
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Servidor SMTP de Gmail
+EMAIL_PORT = 587  # Puerto para conexiones TLS
+EMAIL_USE_TLS = True  # Usar TLS para seguridad
+EMAIL_HOST_USER = 'ignacio.startek.v92@gmail.com'  # Tu correo de Gmail
+# Contraseña de tu cuenta de Gmail (o App Password)
+EMAIL_HOST_PASSWORD = 'cstowhkiordjpgyg'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Correo predeterminado para el envío
+
+
+link_config_google = "https://myaccount.google.com/apppasswords?pli=1&rapt=AEjHL4PVBeRvsoo4g3FPzMcG7S70E7TNZ8V9I1m44HphLc1_cxMb-HY2HCDQyE04YkeWNGmAEvBXJg9Cd8-wZjYCQdjviHKGA-h_tSJHuzp1MmZwhnzQFSg"

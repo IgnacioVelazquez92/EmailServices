@@ -1,0 +1,63 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Mis Campañas</h1>
+
+    <!-- Mensaje de éxito o error -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="mb-3">
+        <a href="{% url 'create_campaign' %}" class="btn btn-primary">Crear Nueva Campaña</a>
+    </div>
+
+    {% if campaigns %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Asunto</th>
+                    <th>Estado</th>
+                    <th>Fecha programada</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for campaign in campaigns %}
+                    <tr>
+                        <td>{{ campaign.id }}</td>
+                        <td>{{ campaign.subject }}</td>
+                        <td>
+                            <span class="badge bg-dark
+                                {% if campaign.status == 'DRAFT' %}badge-secondary
+                                {% elif campaign.status == 'SCHEDULED' %}badge-warning
+                                {% elif campaign.status == 'SENDING' %}badge-info
+                                {% elif campaign.status == 'SENT' %}badge-success
+                                {% elif campaign.status == 'FAILED' %}badge-danger
+                                {% endif %}">
+                                {{ campaign.get_status_display }}
+                            </span>
+                        </td>
+                        <td>{{ campaign.scheduled_at|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            <a href="{% url 'campaign_detail' campaign.id %}" class="btn btn-info btn-sm">Ver</a>
+                            <a href="{% url 'campaign_edit' campaign.id %}" class="btn btn-warning btn-sm">Editar</a>
+                            {% if campaign.status == 'DRAFT' %}
+                                <a href="{% url 'send_campaign' campaign.id %}" class="btn btn-success btn-sm">Enviar</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tienes campañas creadas. ¡Crea una nueva campaña para empezar!</p>
+    {% endif %}
+</div>
+{% endblock %}
